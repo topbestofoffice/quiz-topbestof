@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <meta name="keywords" content="personal loans, home loans, auto loans, student loans, business loans, credit score, interest rates, loan calculator, financial planning, debt consolidation" />
+    <meta name="description" content="Learn about loans, credit scores, and financial planning. Compare personal loans, home loans, auto loans, and student loans with competitive interest rates." />
+    
+    <meta name="page-topics" content="finance,banking,loans,credit,personal-finance" />
+    <meta name="content-category" content="finance" />
+    <meta name="audience" content="loan-seekers,finance-planning,credit-building" />
+    
+    <link rel="dns-prefetch" href="//securepubads.g.doubleclick.net">
+    <link rel="dns-prefetch" href="//pagead2.googlesyndication.com" />
+    <link rel="dns-prefetch" href="//googleads.g.doubleclick.net" />
+    <link rel="dns-prefetch" href="//tpc.googlesyndication.com">
+    
+    <link rel="preconnect" href="//securepubads.g.doubleclick.net">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com/" crossorigin />
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/" crossorigin />
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/" crossorigin />
+    
+    <link rel="preload" as="script" href="https://securepubads.g.doubleclick.net/tag/js/gpt.js">
+    
+    <title>Personal Loans & Financial Planning Quiz - Learn About Credit & Interest Rates | Topbestof</title>
+    <link rel="shortcut icon" href="images/quiz_favicon.png" type="image/x-icon" />
+    <link href="css/tailwind.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      :root {
+        --primary: #6a11cb;
+        --secondary: #2575fc;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+
+      .modal.visible {
+        display: flex;
+        opacity: 1;
+      }
+
+      .modal .modal-content {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        transform: scale(0.9);
+        transition: transform 0.3s ease-in-out;
+        max-width: 400px;
+        width: 90%;
+      }
+
+      .modal.visible .modal-content {
+        transform: scale(1);
+      }
+
+      .modal p {
+        text-align: center;
+        margin: 0 0 15px;
+        font-size: 1.1em;
+      }
+
+      .modal .btn {
+        margin: 8px 5px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background 0.3s, transform 0.2s;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .modal .btn:hover {
+        transform: scale(1.02);
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+    
+    <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+    <script src="js/lite-font.min.js"></script>
+
+    <script>
+      const REWARDED_AD_UNIT_ID = '/22760191030/rumas';
+      const REWARD_AMOUNT = 100;
+      const NAVIGATION_DELAY = 800;
+      const MOBILE_TOP_SLOT_ID = 'Topbestof_Mobile_Top';
+      const FORCE_POPUP_SHOW = false;
+    </script>
+    
+    <script>
+      window.googletag = window.googletag || {cmd: []};
+      let rewardedSlot = null;
+      let rewardPayload = null;
+      let waitingToShowRewardAd = false; // NEW: Flag to auto-show ad when ready
+      let rewardAdInitialized = false; // NEW: Track if slot has been defined
+      
+      const rewardAdPool = {
+        slots: [],
+        readySlots: [],
+        activeSlotIndex: -1,
+        maxSlots: 2,
+        
+        addSlot(slot) {
+          this.slots.push(slot);
+          console.log('[Reward-Pool] Slot added, total slots:', this.slots.length);
+        },
+        
+        markSlotReady(slot) {
+          if (!this.readySlots.includes(slot)) {
+            this.readySlots.push(slot);
+            console.log('[Reward-Pool] Slot marked ready, ready count:', this.readySlots.length);
+          }
+        },
+        
+        getReadySlot() {
+          const slot = this.readySlots.length > 0 ? this.readySlots[0] : null;
+          console.log('[Reward-Pool] Getting ready slot:', slot ? 'Found' : 'None');
+          return slot;
+        },
+        
+        removeReadySlot(slot) {
+          const index = this.readySlots.indexOf(slot);
+          if (index > -1) {
+            this.readySlots.splice(index, 1);
+            console.log('[Reward-Pool] Removed ready slot, remaining:', this.readySlots.length);
+          }
+        },
+        
+        shouldCreateNewSlot() {
+          const should = this.slots.length < this.maxSlots && this.readySlots.length === 0;
+          console.log('[Reward-Pool] Should create new slot?', should, '(slots:', this.slots.length, 'ready:', this.readySlots.length + ')');
+          return should;
+        },
+        
+        clear() {
+          console.log('[Reward-Pool] Clearing pool');
+          this.slots = [];
+          this.readySlots = [];
+          this.activeSlotIndex = -1;
+        }
+      };
+
+      function initializeRewardedAd(isReinit = false) {
+        console.log('[Reward-Init] Starting initialization, isReinit:', isReinit);
+        
+        if (isReinit && !rewardAdPool.shouldCreateNewSlot()) {
+          console.log('[Reward-Init] Skipping reinit - pool conditions not met');
+          return;
+        }
+        
+        if (rewardAdInitialized && !isReinit) {
+          console.log('[Reward-Init] Already initialized, skipping');
+          return;
+        }
+        
+        googletag.cmd.push(() => {
+          try {
+            console.log('[Reward-Init] Defining rewarded slot with unit ID:', REWARDED_AD_UNIT_ID);
+            rewardedSlot = googletag.defineOutOfPageSlot(
+              REWARDED_AD_UNIT_ID,
+              googletag.enums.OutOfPageFormat.REWARDED
+            );
+          } catch (error) {
+            console.error('[Reward-Init] ❌ Failed to define slot:', error);
+            return;
+          }
+          if (rewardedSlot) {
+            console.log('[Reward-Init] ✅ Slot defined successfully');
+            rewardedSlot.addService(googletag.pubads());
+            rewardAdPool.addSlot(rewardedSlot);
+            rewardAdInitialized = true;
+            
+            // Event: Ad is ready to show
+            googletag.pubads().addEventListener('rewardedSlotReady', (event) => {
+              console.log('[Reward-Event] 🎬 rewardedSlotReady fired!');
+              
+              if (event.slot && !rewardAdPool.readySlots.includes(event.slot)) {
+                window.rewardedSlotReadyEvent = event;
+                rewardAdPool.markSlotReady(event.slot);
+                console.log('[Reward-Event] Slot marked ready in pool');
+                
+                // NEW: Auto-show if user is waiting
+                if (waitingToShowRewardAd) {
+                  console.log('[Reward-Event] 🚀 User waiting - showing ad immediately');
+                  waitingToShowRewardAd = false;
+                  
+                  try {
+                    event.makeRewardedVisible();
+                    console.log('[Reward-Event] ✅ makeRewardedVisible() called successfully');
+                    
+                    showToast({
+                      title: "Rewarded Ad Active",
+                      msg: "🎬 Enjoy the ad and earn coins!",
+                    });
+                  } catch (err) {
+                    console.error('[Reward-Event] ❌ Error calling makeRewardedVisible:', err);
+                  }
+                }
+              }
+            });
+            // Event: Reward granted
+            googletag.pubads().addEventListener('rewardedSlotGranted', (event) => {
+              console.log('[Reward-Event] 🎉 rewardedSlotGranted fired - User earned reward!');
+              rewardPayload = event.payload;
+              console.log('[Reward-Event] Payload:', rewardPayload);
+            });
+            // Event: Ad closed
+            googletag.pubads().addEventListener('rewardedSlotClosed', (event) => {
+              const userCompleted = rewardPayload !== null;
+              console.log('[Reward-Event] 🔚 rewardedSlotClosed fired, userCompleted:', userCompleted);
+              
+              if (userCompleted) {
+                console.log('[Reward-Event] Granting reward to user');
+                navigateWithReward(true);
+                rewardPayload = null;
+              } else {
+                console.log('[Reward-Event] User closed without completing');
+              }
+              window.rewardedSlotReadyEvent = null;
+              rewardAdPool.removeReadySlot(event.slot);
+              
+              var isOptionEligible = optionClickIsEligible();
+              if (!isOptionEligible) {
+                console.log('[Reward-Event] User ineligible, redirecting...');
+                redirectWithDelay();
+              }
+              
+              // Reload slot for next time
+              setTimeout(() => {
+                if (rewardAdPool.shouldCreateNewSlot()) {
+                  console.log('[Reward-Event] Reloading new slot for future use');
+                  initializeRewardedAd(true);
+                }
+              }, 1500);
+            });
+            // Display (preloads the ad)
+            console.log('[Reward-Init] Calling googletag.display() to preload ad');
+            googletag.display(rewardedSlot);
+            console.log('[Reward-Init] ✅ Display called - waiting for rewardedSlotReady event');
+          } else {
+            console.error('[Reward-Init] ❌ Slot is null after defineOutOfPageSlot');
+          }
+        });
+      }
+
+      function navigateWithReward(userCompleted = false) {
+        console.log('[Reward-Nav] Granting reward, userCompleted:', userCompleted);
+        const currentCoins = parseInt(localStorage.getItem("totalcoin") || "0");
+        const newTotal = currentCoins + REWARD_AMOUNT;
+        
+        localStorage.setItem("totalcoin", newTotal.toString());
+        console.log('[Reward-Nav] Coins updated:', currentCoins, '→', newTotal);
+        
+        if (window.showToast) {
+          showToast({
+            title: "Reward Granted!",
+            msg: `🎉 You earned ${REWARD_AMOUNT} coins for ${userCompleted ? 'watching the ad' : 'viewing the ad'}!`,
+          });
+        }
+        
+        if (!optionClickIsEligible()) {
+          console.log('[Reward-Nav] User ineligible, redirecting...');
+          redirectWithDelay();
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log('[Page] DOMContentLoaded - NOT auto-loading reward ads');
+        
+        const popup = document.getElementById("popupOverlay");
+        if (popup) {
+          popup.style.display = "none";
+          popup.style.opacity = "0";
+          popup.style.pointerEvents = "none";
+        }
+        
+        window.checkGPTStatus = function () {
+          return rewardedSlot ? { status: 'ready', slot: rewardedSlot } : { status: 'not initialized' };
+        };
+
+        const noThanksBtn = document.getElementById("noThanksBtn");
+        if (noThanksBtn) {
+          noThanksBtn.addEventListener("click", () => {
+            const modal = document.getElementById("adPromptModal");
+            if (modal) {
+              modal.classList.remove("visible");
+              setTimeout(() => modal.classList.add("hidden"), 300);
+            }
+          });
+        }
+
+        const noThanksInstallBtn = document.getElementById("noThanksInstallBtn");
+        if (noThanksInstallBtn) {
+          noThanksInstallBtn.addEventListener("click", () => {
+            location.reload();
+          });
+        }
+
+        const installCTA = document.getElementById("installCTA");
+        if (installCTA) {
+          installCTA.addEventListener("click", (event) => {
+            event.preventDefault();
+          });
+        }
+      });
+    </script>
+  </head>
+
+  <body>
+    <div>
+      <div id="toast-container" class="fixed top-5 right-5 space-y-4"></div>
+
+      <div class="popup_model fixed flex justify-center items-center hidden" id="treasure-popup">
+        <div class="usr_reward">
+          <div class="mt-2 flex justify-end">
+            <a href="/playquiz.html">
+              <span class="p-3 font-bold text-xl cursor-pointer mr-4">X</span>
+            </a>
+          </div>
+          <div>
+            <div class="text-center">
+              <div class="col">
+                <div class="flex justify-center">
+                  <div id="lottie-container" style="width: 150px; height: 150px">
+                    <img src="images/treasure.webp" alt="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <h2 class="font-bold text-xl-center">🔥 Exclusive Hot Reward!</h2>
+                <h2 class="text-xl m-3 font-bold">Win 100 Coins Instantly!</h2>
+                <p class="text-sm text-gray-400">Watch hot videos and earn instant rewards</p>
+                <div class="mt-5">
+                  <button class="default_btn w-96" onclick="RewardAd()">Claim</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mobile">
+        <div style="width: 100%"></div>
+        <div class="fist_layer text-center p-3 mt-3">
+          <div class="row">
+            <div class="m-3">
+              <h4 class="hidden">
+                Question <span class="quiz-text" id="currentindex">1</span>/
+                <span id="totalquestion"></span>
+              </h4>
+            </div>
+            <div class="col">
+              <p class="text-sm text-gray-400 font-bold">
+                Choose to answer questions and opt-in to win
+                <i class="fa-solid fa-coins" style="color: #ffd43b"></i> 150 coins!
+              </p>
+              <h4 class="quiz-text hidden" id="quiz-title">Quiz-Title</h4>
+              <img class="cursor-pointer w-12 mx-auto" src="images/notification_bell.gif" alt="Notification bell" />
+            </div>
+            <div class="col mt-3 w-full" id="quiz-container">
+              <div class="QA_area" id="question-container">
+                <p class="font-extrabold text-left" id="question"></p>
+                <div class="q_options mt-2" id="answers"></div>
+                <div class="hidden" id="result"></div>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: center; margin: 10px 0;">
+              <div id="Topbestof_Mobile_Leaderboard" data-slot-name="Topbestof_Mobile_Leaderboard"></div>
+            </div>
+            <div class="col mt-10">
+              <div class="ft_area p-3">
+                <div class="font-bold text-xl mb-3">
+                  <i class="fa-solid fa-book fa-sm"></i> Genius Facts
+                </div>
+                <div class="text-gray-400 font-bold text-left text-sm">
+                  <p class="mb-2">🔘 A loan is a sum of money borrowed from a lender that is expected to be repaid with interest over time.</p>
+                  <p class="mb-2">🔘 Loans can be secured (backed by collateral) or unsecured (based on creditworthiness).</p>
+                  <p class="mb-2">🔘 Common types include personal loans, home loans, auto loans, and student loans.</p>
+                  <p class="mb-2">🔘 Interest rates vary depending on the type of loan, the borrower's credit score, and the lending institution.</p>
+                  <p class="mb-2">🔘 Timely repayment helps build credit, while missed payments can damage credit scores and lead to penalties.</p>
+                  <p class="mb-2">🔘 Loans are a critical financial tool, allowing individuals and businesses to access funds for education, housing, emergencies, or business expansion.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col mt-4">
+              <div class="QA_rules">
+                <h1 class="text-2xl font-bold text-left">Play Quiz and Win Coins!</h1>
+                <ul class="mt-1 p-3 text-gray-400 text-sm font-bold">
+                  <li>Play Quizzes in 25+ categories like GK, Sports, Bollywood, Business, Cricket & More!</li>
+                  <li>Compete with lakhs of other players!</li>
+                  <li>Win Coins for every game</li>
+                  <li>Trusted by millions of other quiz enthusiasts like you!</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="popup-overlay" id="popupOverlay">
+      <div class="popup-content">
+        <button class="close-popup" id="closePopupBtn" onclick="closePopup()" style="display: none;">x</button>
+        <div style="display: flex; justify-content: center; align-items: center; padding: 10px;">
+          <div data-slot-name="Topbestof_Mobile_Top" id="Topbestof_Mobile_Top"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/index.js"></script>
+
+    <script>
+      let popupShown = false;
+      let optionClickCount = 0;
+      const MOBILE_TOP_SLOTID = 'Topbestof_Mobile_Top';
+      let leaderboardLoaded = false;
+      let pendingSlotsProcessed = false;
+
+      function optionClickIsEligible() {
+        return optionClickCount <= 1;
+      }
+
+      googletag.cmd.push(() => {
+        googletag.pubads().addEventListener('slotRenderEnded', (event) => {
+          const slotId = event.slot.getSlotElementId();
+          
+          if(event.isEmpty){
+            console.log("slot id & empty - ", slotId);
+            if ((
+              slotId.toLowerCase().includes('reward') ||
+              event.slot === rewardedSlot
+            ) && !optionClickIsEligible()) {
+              redirectWithDelay();
+              return;
+            }
+            // Fallback if popup ad failed to load
+            const isPopupSlot =
+              (slotId && slotId.includes(MOBILE_TOP_SLOTID)) ||
+              (slotId === MOBILE_TOP_SLOTID) ||
+              (slotId && slotId.includes('gpt-ad-' + MOBILE_TOP_SLOTID));
+            if (isPopupSlot) {
+              console.log('[Popup] Ad slot empty, loading leaderboard as fallback');
+              toProcessPendingSlots();
+              setTimeout(() => {
+                loadLeaderboardAd();
+              }, 1000);
+            }
+            return;
+          }
+
+          const isPopupSlot = (
+            (slotId && slotId.includes(MOBILE_TOP_SLOT_ID)) ||
+            (slotId === MOBILE_TOP_SLOT_ID) ||
+            (slotId && slotId.includes('gpt-ad-' + MOBILE_TOP_SLOT_ID))
+          );
+
+          if (isPopupSlot) {
+              const adElement = document.getElementById(MOBILE_TOP_SLOT_ID) || document.getElementById(slotId);
+              
+              // Wait 150ms for iframe injection
+              setTimeout(() => {
+                  // Multi-layer verification
+                  const isDivEmpty = !adElement || 
+                                    adElement.children.length === 0 || 
+                                    adElement.innerHTML.trim() === '' ||
+                                    (adElement.offsetWidth === 0 && adElement.offsetHeight === 0);
+                  
+                  // Check for iframe (GPT ads render in iframes)
+                  const hasIframe = adElement && adElement.querySelector('iframe') !== null;
+                  
+                  const shouldShowPopup = (
+                    FORCE_POPUP_SHOW || 
+                    (!event.isEmpty)
+                  ) && !popupShown;
+                  
+                  if (shouldShowPopup) {
+                    setTimeout(() => {
+                      const popup = document.getElementById("popupOverlay");
+                      if (popup) {
+                        popup.style.display = "flex";
+                        popup.style.opacity = "1";
+                        popup.style.pointerEvents = "auto";
+                        popup.classList.add("visible");
+                        const closeBtn = document.getElementById("closePopupBtn");
+                        if (closeBtn) {
+                          closeBtn.style.display = "flex";
+                        }
+                        popupShown = true;
+                        // Edge case: User never closes
+                        setTimeout(function() {
+                          const popupStillOpen = popup.style.display === "flex";
+                          if (popupStillOpen && !leaderboardLoaded) {
+                            console.log('[Popup] Timeout - loading leaderboard after 3s');
+                            loadLeaderboardAd();
+                          }
+                        }, 3000);
+                      }
+                    }, 100);
+                  }
+                  else if (window.AdManager && typeof window.AdManager.processPendingSlots === 'function') {
+                    setTimeout(() => {
+                      console.log('[PopUp] Processing pending slots...');
+                      toProcessPendingSlots();
+                      if (window.AdSystemConfig && window.AdSystemConfig.debug) {
+                        showToast({
+                          title: "Ads Loaded",
+                          msg: "📊 Leaderboard ad now loading for better viewability"
+                        });
+                      }
+                    }, 300);
+                  }
+              }, 150);
+          }
+
+          if (event.slot === rewardedSlot && event.isEmpty) {
+            showToast({
+              title: "No Ad Available",
+              msg: "🚫 No rewarded ad available right now. Try again later!",
+            });
+          }
+        });
+
+        googletag.pubads().addEventListener("slotRequested", (event) => {});
+        googletag.pubads().addEventListener("slotOnload", (event) => {});
+        googletag.pubads().addEventListener("slotResponseReceived", (event) => {});
+        googletag.pubads().addEventListener('impressionViewable', (event) => {
+          const slot = event.slot;
+          const slotId = slot.getSlotElementId();
+        });
+      });
+
+      function redirectWithDelay() {
+        setTimeout(() => {
+          if (window.location.pathname !== "/playquiz.html") {
+            window.location.href = "/playquiz.html";
+          }
+        }, NAVIGATION_DELAY);
+      }
+
+      function loadLeaderboardAd() {
+        if (!pendingSlotsProcessed) {
+          console.log('[Leaderboard] Calling toProcessPendingSlots before ad load');
+          toProcessPendingSlots();
+          
+          setTimeout(() => {
+            loadLeaderboardAd();
+          }, 500);
+          return;
+        }
+
+        if (leaderboardLoaded) {
+          console.log('[Leaderboard] Already loaded, skipping duplicate call');
+          return;
+        }
+
+        const leaderboardDiv = document.getElementById('Topbestof_Mobile_Leaderboard');
+        if (!leaderboardDiv) {
+          console.error('[Leaderboard] Div not found in DOM');
+          return;
+        }
+
+        if (!window.googletag || !window.googletag.cmd) {
+          console.error('[Leaderboard] GPT not ready');
+          return;
+        }
+
+        leaderboardLoaded = true;
+
+        googletag.cmd.push(function() {
+          googletag.display('Topbestof_Mobile_Leaderboard');
+          console.log('[Leaderboard] Ad slot displayed after user engagement');
+        });
+      }
+
+      function toProcessPendingSlots() {
+        if (pendingSlotsProcessed) {
+          console.log('[toProcessPendingSlots] Already called, skipping duplicate execution');
+          return false;
+        }
+
+        if (!window.AdManager || typeof window.AdManager.processPendingSlots !== 'function') {
+          console.error('[toProcessPendingSlots] AdManager.processPendingSlots not available');
+          return false;
+        }
+
+        pendingSlotsProcessed = true;
+        window.AdManager.processPendingSlots();
+        return true;
+      }
+
+      function closePopup() {
+        const popup = document.getElementById("popupOverlay");
+        const closeBtn = document.getElementById("closePopupBtn");
+        
+        if (popup) {
+          popup.classList.remove("visible");
+          setTimeout(() => {
+            popup.style.display = "none";
+            popup.style.opacity = "0";
+            popup.style.pointerEvents = "none";
+            loadLeaderboardAd();
+          }, 300);
+        }
+        if (closeBtn) {
+          closeBtn.style.display = "none";
+        }
+        popupShown = false;
+      }
+
+      const answersContainer = document.getElementById("answers");
+      answersContainer.addEventListener("click", function(event) {
+        if (event.target.classList.contains("option")) {
+          optionClickCount++;
+          if (optionClickIsEligible()) {
+            RewardAd();
+          } else {
+            treasureopen();
+          }
+        }
+      });
+ 
+      function treasurepopremove() {
+        let model = document.getElementById("treasure-popup");
+        let popup = document.querySelector(".usr_reward");
+        model.classList.remove("show");
+        popup.classList.remove("show");
+        setTimeout(() => {
+          model.classList.add("hidden");
+        }, 300);
+      }
+
+      function treasureopen() {
+        let model = document.getElementById("treasure-popup");
+        let popup = document.querySelector(".usr_reward");
+        model.classList.remove("hidden");
+        setTimeout(() => {
+          model.classList.add("show");
+          popup.classList.add("show");
+        }, 50);
+      }
+
+      function closereward() {
+        location.href = "/playquiz.html";
+      }
+
+      function showToast(e) {
+        return;
+        const config = window.AdSystemConfig;
+        if (config && config.debug === false) {
+          return;
+        }
+        
+        const toast = document.createElement("div");
+        toast.className = "max-w-xs bg-white border border-gray-200 p-4 rounded shadow-lg flex items-center space-x-4";
+        toast.innerHTML = `
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7 12l5 5L21 7" />
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm font-semibold">${e.title}</p>
+            <p class="text-sm">${e.msg}</p>
+          </div>
+        `;
+        
+        const container = document.getElementById("toast-container");
+        if (container) {
+          container.appendChild(toast);
+          setTimeout(() => {
+            if (toast.parentNode) {
+              toast.remove();
+            }
+          }, 3000);
+        }
+      }
+
+      // SIMPLIFIED RewardAd() - Just init and set flag, let event handler show ad
+      function RewardAd() {
+        console.log('[RewardAd] 🎯 Function called, optionClickCount:', optionClickCount);
+        
+        if (!optionClickIsEligible()) {
+          console.log('[RewardAd] User ineligible, closing treasure popup');
+          treasurepopremove();
+        }
+        
+        if (window.isBotTraffic) {
+          console.error("[RewardAd] ❌ Bot traffic detected - blocking ad");
+          showToast({
+            title: "Not Available",
+            msg: "❌ Reward ads are not available at this time.",
+          });
+          return false;
+        }
+        
+        if (!window.googletag) {
+          console.error("[RewardAd] ❌ GPT not loaded");
+          showToast({
+            title: "Error",
+            msg: "🚫 Ad system not ready. Please try again.",
+          });
+          return false;
+        }
+        // Check if ad is already ready and show immediately
+        if (window.rewardedSlotReadyEvent) {
+          console.log('[RewardAd] ✅ Ad already ready - showing immediately');
+          try {
+            window.rewardedSlotReadyEvent.makeRewardedVisible();
+            window.rewardedSlotReadyEvent = null;
+            
+            showToast({
+              title: "Rewarded Ad Active",
+              msg: "🎬 Enjoy the ad and earn coins!",
+            });
+            return true;
+          } catch (err) {
+            console.error('[RewardAd] ❌ Error showing ready ad:', err);
+          }
+        }
+        // If not initialized, init and set waiting flag
+        if (!rewardAdInitialized) {
+          console.log('[RewardAd] 🔄 First call - initializing ad slot');
+          waitingToShowRewardAd = true;
+          initializeRewardedAd(false);
+          
+          showToast({
+            title: "Loading Ad...",
+            msg: "⏳ Preparing your reward ad...",
+          });
+          
+          // Fallback timeout: Reward without ad after 5s
+          setTimeout(() => {
+            if (waitingToShowRewardAd) {
+              console.log('[RewardAd] ⏱️ Timeout - no ad loaded in 5s, giving fallback reward');
+              waitingToShowRewardAd = false;
+              navigateWithReward(false);
+            }
+          }, 5000);
+          
+          return false;
+        }
+        // Already initialized but not ready - set flag and wait
+        console.log('[RewardAd] ⏳ Ad initializing - setting wait flag');
+        waitingToShowRewardAd = true;
+        
+        showToast({
+          title: "Loading Ad...",
+          msg: "⏳ Your ad will show shortly...",
+        });
+        
+        // Fallback timeout
+        setTimeout(() => {
+          if (waitingToShowRewardAd) {
+            console.log('[RewardAd] ⏱️ Timeout - giving fallback reward');
+            waitingToShowRewardAd = false;
+            navigateWithReward(false);
+          }
+        }, 5000);
+        
+        return false;
+      }
+    </script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4TSLVVBZB5"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-4TSLVVBZB5");
+    </script>
+    <!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2269043296918674');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2269043296918674&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+    <script defer src="js/jquery-3.6.4.min.js"></script>
+  </body>
+</html>
+
+
+

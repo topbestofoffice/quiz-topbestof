@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">    
+    <!-- Viewport meta tag to ensure proper scaling on different devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- PRIORITY 1: Google Ads infrastructure for fastest ad loading -->
+    <link rel="dns-prefetch" href="//securepubads.g.doubleclick.net">
+    <link rel="dns-prefetch" href="//pagead2.googlesyndication.com" />
+    <link rel="dns-prefetch" href="//googleads.g.doubleclick.net" />
+    <link rel="dns-prefetch" href="//tpc.googlesyndication.com">
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="//securepubads.g.doubleclick.net">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com/" crossorigin />
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/" crossorigin />
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/" crossorigin />
+    
+    <!-- Preload the essential scripts -->
+    <link rel="preload" as="script" href="https://securepubads.g.doubleclick.net/tag/js/gpt.js">
+    <!-- Google Publisher Tag (GPT) for rewarded ads -->
+    <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+    
+    
+    <script src="js/lite-font.js"></script>
+    
+    <!-- Title of the web page -->
+    <title> Quiz Topbestof | Play Quiz game Learn & Gain Knowledge </title>
+    <!-- Favicon Of Site -->
+    <link rel="shortcut icon" href="images/quiz_favicon.png" type="image/x-icon">
+    <!-- Link to Tailwind CSS for styling -->
+    <link href="css/tailwind.min.css" rel="stylesheet">
+    <!-- Link to custom CSS for additional styles -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- GPT Configuration for Rewarded Ads -->
+    <script>
+      // Constants for GPT Rewarded Ad Configuration
+      const REWARDED_AD_UNIT_ID = '/22760191030/rumas';
+      const REWARD_AMOUNT = 100;
+      const NAVIGATION_DELAY = 800; // Navigation delay in milliseconds
+    </script>
+    
+    <script>
+      // GPT Rewarded Ad Setup for Home
+      window.googletag = window.googletag || { cmd: [] };
+      let rewardedSlot;
+      let rewardPayload;
+
+      // Reward Ad Pool Management
+      const rewardAdPool = {
+        slots: [],
+        readySlots: [],
+        activeSlotIndex: -1,
+        maxSlots: 2,
+        
+        addSlot(slot) {
+          this.slots.push(slot);
+          console.log(`[HOME-Pool] Added slot. Total slots: ${this.slots.length}`);
+        },
+        
+        markSlotReady(slot) {
+          if (!this.readySlots.includes(slot)) {
+            this.readySlots.push(slot);
+            console.log(`[HOME-Pool] Slot marked ready. Ready slots: ${this.readySlots.length}`);
+          }
+        },
+        
+        getReadySlot() {
+          return this.readySlots.length > 0 ? this.readySlots[0] : null;
+        },
+        
+        removeReadySlot(slot) {
+          const index = this.readySlots.indexOf(slot);
+          if (index > -1) {
+            this.readySlots.splice(index, 1);
+            console.log(`[HOME-Pool] Removed ready slot. Remaining: ${this.readySlots.length}`);
+          }
+        },
+        
+        shouldCreateNewSlot() {
+          return this.slots.length < this.maxSlots && this.readySlots.length === 0;
+        },
+        
+        clear() {
+          this.slots = [];
+          this.readySlots = [];
+          this.activeSlotIndex = -1;
+          console.log('[HOME-Pool] Cleared all slots');
+        }
+      };
+
+      function initializeRewardedAd(isReinit = false) {
+        googletag.cmd.push(() => {
+          // Define the rewarded ad slot
+          try {
+            rewardedSlot = googletag.defineOutOfPageSlot(
+              REWARDED_AD_UNIT_ID,
+              googletag.enums.OutOfPageFormat.REWARDED
+            );
+          } catch (error) {
+            console.error('[HOME-GPT-ERROR] Failed to define rewarded slot:', error);
+          }
+
+          if (rewardedSlot) {
+            rewardedSlot.addService(googletag.pubads());
+            rewardAdPool.addSlot(rewardedSlot);
+            
+            googletag.pubads().addEventListener('rewardedSlotReady', (event) => {
+              console.log('[HOME-GPT] Rewarded ad ready');
+              window.rewardedSlotReadyEvent = event;
+              rewardAdPool.markSlotReady(event.slot);
+            });
+
+            googletag.pubads().addEventListener('rewardedSlotVideoCompleted', (event) => {
+              console.log('[HOME-GPT] Video completed');
+            });
+
+            googletag.pubads().addEventListener('rewardedSlotGranted', (event) => {
+              console.log('[HOME-GPT] Reward granted by user');
+              rewardPayload = event.payload;
+              // Navigation will be handled in rewardedSlotClosed event
+            });
+
+            googletag.pubads().addEventListener('rewardedSlotClosed', (event) => {
+              console.log('[HOME-GPT-EVENT] 🔄 Reward ad closed - preparing for reuse');
+              
+              // Determine if user completed the ad (received reward) or skipped
+              const userCompleted = rewardPayload !== null;
+              
+              if (userCompleted) {
+                console.log('[HOME-GPT-EVENT] ✅ User completed ad and earned reward');
+                rewardPayload = null;
+              } else {
+                console.log('[HOME-GPT-EVENT] ⏭️ User skipped the ad without completing');
+              }
+
+              // Clear the ready event
+              window.rewardedSlotReadyEvent = null;
+              
+              // Remove from ready pool
+              rewardAdPool.removeReadySlot(event.slot);
+              
+              // Handle navigation based on completion status
+              if (userCompleted) {
+                // User completed ad - grant reward (no redirect, just update UI)
+                navigateWithReward(true);
+              } else {
+                console.log('[HOME-GPT-EVENT] User skipped, no reward');
+              }
+              
+              // Auto-reinitialize slot if needed for future use
+              console.log('[HOME-GPT-EVENT] ⏳ Scheduling slot reinitialization...');
+              setTimeout(() => {
+                if (rewardAdPool.shouldCreateNewSlot()) {
+                  console.log('[HOME-GPT-EVENT] ✅ Creating new slot for next reward opportunity');
+                  initializeRewardedAd(true);
+                } else {
+                  console.log('[HOME-GPT-EVENT] 📊 Pool has ready slots, no reinit needed');
+                }
+              }, 1000);
+            });
+          } else {
+            console.error('[HOME-GPT-ERROR] ❌ Failed to create rewarded ad slot - rewardedSlot is null/undefined');
+          }
+
+          googletag.pubads().addEventListener('slotRenderEnded', (event) => {
+          });
+
+          if(rewardedSlot){
+            googletag.display(rewardedSlot);
+          }
+          
+          const initType = isReinit ? 'reinitialized' : 'initialized';
+          console.log(`[HOME-GPT] Rewarded ad ${initType}`);
+        });
+      }
+
+      // Function to handle user reward and navigation
+      function navigateWithReward(userCompleted = false) {
+        const currentCoins = parseInt(localStorage.getItem("totalcoin") || "0");
+        const newTotal = currentCoins + REWARD_AMOUNT;
+        
+        localStorage.setItem("totalcoin", newTotal.toString());
+        
+        const actionType = userCompleted ? 'watched' : 'closed';
+        console.log(`[HOME-Reward] User ${actionType} ad. Granted ${REWARD_AMOUNT} coins. Total: ${newTotal}`);
+        
+        // Update the UI coin display
+        const coinDisplay = document.getElementById('total_coins');
+        if (coinDisplay) {
+          coinDisplay.innerText = newTotal;
+        }
+        
+        if (window.showToast) {
+          showToast({
+            title: "Reward Granted!",
+            msg: `🎉 You earned ${REWARD_AMOUNT} coins for ${userCompleted ? 'watching the ad' : 'viewing the ad'}!`,
+          });
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // Initialize rewarded ad
+        initializeRewardedAd();
+        
+        // Function to check GPT readiness
+        window.checkGPTStatus = function () {
+          return rewardedSlot ? { status: 'ready', slot: rewardedSlot } : { status: 'initializing' };
+        };
+      });
+    </script>
+</head>
+
+<body>
+    <div>
+        <div id="toast-container" class="fixed top-5 right-5 space-y-4"></div>
+        
+        <!-- Hidden pg-rewarded element for PubGuru integration -->
+        <a
+            id="hiddenRewardedBtn"
+            href="intent://details?id=com.topbestof.qwizb#Intent;scheme=market;package=com.android.vending;end"
+            class="pg-rewarded"
+            style="display: none"
+            >Watch Video Ad</a>
+            
+        <div class="mobile">
+            <div class="d-flex justify-center text-center">
+                <div style="width: 100%;">
+                    <div data-slot-name="Topbestof_Mobile_Top" id="Topbestof_Mobile_Top"></div>
+                </div>
+                <div class=" grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 gap-0 lg:gap-0 ">
+                    <!-- Logo section -->
+                    <div class="col-auto">
+                        <img src="images/logo.png" alt="Logo" class="px-2">
+                    </div>
+                    <!-- Lottie animation for reward ad -->
+                    <div class="flex justify-end items-center col-span-3">
+                        <div onclick="RewardAd()" id="lottie-container" class="inline-block"
+                            style="width: 40px; height: 40px;">
+                            <img src="images/Reward.png" alt="Reward">
+                        </div>
+                    </div>
+                    <!-- User wallet display -->
+                    <div class="user_wallet text-sm font-semibold flex justify-end items-center col-end-6 mr-3">
+                        <span class="rounded-full px-3 me-2"><strong id="total_coins"></strong> <i
+                                class="fa-solid fa-coins" style="color: #FFD43B;"></i> </span>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Categories section -->
+            <div class="first_layer_home text-center p-3 mt-3">
+                <div class="row" id="sub_categories">
+                    <!-- Here's subcategoyr content -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom navigation bar -->
+    <div class="sticky bottom-0" style="background-color: transparent;">
+        <div class="m-auto  left-0 z-50 w-full h-16 bg-dark  dark:border-gray-600 bottom_bar"
+            style="background-color: #454545; border-radius: 14px 14px 0 0; box-shadow: #1a1a1a 0px -10px 10px;">
+            <div class="grid h-full max-w-lg grid-cols-3 mx-auto">
+                <!-- Category button -->
+                <button type="button" onclick="window.location.href='category.html'"
+                    class="inline-flex flex-col items-center justify-center font-medium px-5  dark:hover:bg-gray-800 group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                            stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    <span class="text-sm">Category</span>
+                </button>
+                <!-- Home button -->
+                <button type="button" onclick="window.location.href='home.html'"
+                    class="inline-flex flex-col items-center justify-center font-medium px-5  bg-gray-700 group"
+                    style="background-color: #454545; border-radius: 14px 14px 0 0; box-shadow: #1a1a1a  0px 0px 19px">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="#ffff" stroke="#ffff"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M10.7069 2.29303C10.5194 2.10556 10.2651 2.00024 9.99992 2.00024C9.73475 2.00024 9.48045 2.10556 9.29292 2.29303L2.29292 9.29303C2.11076 9.48163 2.00997 9.73423 2.01224 9.99643C2.01452 10.2586 2.11969 10.5094 2.3051 10.6948C2.49051 10.8803 2.74132 10.9854 3.00352 10.9877C3.26571 10.99 3.51832 10.8892 3.70692 10.707L3.99992 10.414V17C3.99992 17.2652 4.10528 17.5196 4.29281 17.7071C4.48035 17.8947 4.7347 18 4.99992 18H6.99992C7.26514 18 7.51949 17.8947 7.70703 17.7071C7.89456 17.5196 7.99992 17.2652 7.99992 17V15C7.99992 14.7348 8.10528 14.4805 8.29281 14.2929C8.48035 14.1054 8.7347 14 8.99992 14H10.9999C11.2651 14 11.5195 14.1054 11.707 14.2929C11.8946 14.4805 11.9999 14.7348 11.9999 15V17C11.9999 17.2652 12.1053 17.5196 12.2928 17.7071C12.4803 17.8947 12.7347 18 12.9999 18H14.9999C15.2651 18 15.5195 17.8947 15.707 17.7071C15.8946 17.5196 15.9999 17.2652 15.9999 17V10.414L16.2929 10.707C16.4815 10.8892 16.7341 10.99 16.9963 10.9877C17.2585 10.9854 17.5093 10.8803 17.6947 10.6948C17.8801 10.5094 17.9853 10.2586 17.9876 9.99643C17.9899 9.73423 17.8891 9.48163 17.7069 9.29303L10.7069 2.29303Z"
+                            fill="#ffff" />
+                    </svg>
+                    <span class="text-sm">Home</span>
+                </button>
+                <!-- Profile button -->
+                <button type="button" onclick="window.location.href='profile.html'"
+                    class="inline-flex flex-col items-center justify-center font-medium px-5  dark:hover:bg-gray-800 group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                            stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    <span class="text-sm">Profile</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="data/home.js"></script>
+    <script>
+        function RewardAd() {
+            // ===== BOT PROTECTION CHECK =====
+            if (window.isBotTraffic) {
+              console.error("[HOME-RewardAd] 🤖 Bot traffic - Reward ads disabled");
+              showToast({
+                title: "Not Available",
+                msg: "❌ Reward ads are not available at this time.",
+              });
+              return false;
+            }
+            
+            // Check if GPT is ready
+            if (!window.googletag) {
+              console.error("[HOME-RewardAd] GPT not ready");
+              showToast({
+                title: "Error",
+                msg: "🚫 Ad system not ready. Please try again.",
+              });
+              return false;
+            }
+
+            try {
+              // Try to use a ready slot from pool
+              const readySlot = rewardAdPool.getReadySlot();
+              
+              if (readySlot && window.rewardedSlotReadyEvent) {
+                console.log('[HOME-RewardAd] 🎬 Using ready slot from pool');
+                window.rewardedSlotReadyEvent.makeRewardedVisible();
+                rewardAdPool.removeReadySlot(readySlot);
+                
+                showToast({
+                  title: "Rewarded Ad Active",
+                  msg: "🎬 Rewarded ad is now active!",
+                });
+                window.rewardedSlotReadyEvent = null;
+                return true;
+              } else if (window.rewardedSlotReadyEvent) {
+                console.log('[HOME-RewardAd] 🎬 Using main rewarded slot');
+                window.rewardedSlotReadyEvent.makeRewardedVisible();
+                
+                showToast({
+                  title: "Rewarded Ad Active",
+                  msg: "🎬 Rewarded ad is now active!",
+                });
+                window.rewardedSlotReadyEvent = null;
+                return true;
+              } else {
+                console.log("[HOME-RewardAd] ⏳ No ready slot available yet. Creating new slot...");
+                
+                if (rewardAdPool.shouldCreateNewSlot()) {
+                  initializeRewardedAd(true);
+                  
+                  showToast({
+                    title: "Loading Ad...",
+                    msg: "⏳ Preparing rewarded ad for you...",
+                  });
+                  
+                  return false;
+                } else {
+                  console.log("[HOME-RewardAd] Pool has slots but none ready");
+                  showToast({
+                    title: "Ad Not Ready",
+                    msg: "⏳ Please wait for the next ad to be ready",
+                  });
+                  return false;
+                }
+              }
+            } catch (error) {
+              console.error("[HOME-RewardAd] Error:", error.message);
+              
+              // Fallback: Direct reward
+              const currentCoins = parseInt(localStorage.getItem("totalcoin") || "0");
+              const newTotal = currentCoins + REWARD_AMOUNT;
+              localStorage.setItem("totalcoin", newTotal.toString());
+              
+              // Update UI
+              const coinDisplay = document.getElementById('total_coins');
+              if (coinDisplay) {
+                coinDisplay.innerText = newTotal;
+              }
+              
+              showToast({
+                title: "Reward Granted!",
+                msg: `🎉 You earned ${REWARD_AMOUNT} coins! (Fallback)`,
+              });
+              
+              return false;
+            }
+        }
+
+        function showToast(e) {
+            // Check debug setting and return early if debug is false
+            const config = window.AdSystemConfig;
+            if (config && config.debug === false) {
+              console.log("[Toast-Debug-Off]", e.title, "-", e.msg);
+              return;
+            }
+            
+            // Create the toast element
+            const toast = document.createElement('div');
+            toast.className = 'max-w-xs  border border-gray-200 p-4 rounded shadow-lg flex items-center space-x-4';
+            toast.innerHTML = `
+            <div class="flex-shrink-0">
+              <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7 12l5 5L21 7" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-semibold">${e.title}</p>
+              <p class="text-sm">${e.msg}</p>
+            </div>
+          `;
+
+            // Append the toast to the container
+            document.getElementById('toast-container').appendChild(toast);
+
+            // Automatically remove the toast after 3 seconds
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Initialize coin display
+        let allcoins = localStorage.getItem('totalcoin');
+        if (document.getElementById('total_coins')) {
+            document.getElementById('total_coins').innerText = allcoins || '0';
+        }
+
+    </script>
+
+    <script defer src="js/jquery-3.6.4.min.js"></script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4TSLVVBZB5"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-4TSLVVBZB5');
+    </script>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2269043296918674');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2269043296918674&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+</body></body>
+
+
+</html>
+
+
+

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">    
+    <!-- Viewport meta tag to ensure proper scaling on different devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- PRIORITY 1: Enhanced Google Ads infrastructure for fastest ad loading -->
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="//securepubads.g.doubleclick.net">
+    <link rel="dns-prefetch" href="//pagead2.googlesyndication.com" />
+    <link rel="dns-prefetch" href="//googleads.g.doubleclick.net" />
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="//securepubads.g.doubleclick.net">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com/" crossorigin />
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/" crossorigin />
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/" crossorigin />
+    
+    <!-- Preload the scripts -->
+    <link rel="preload" as="script" href="https://securepubads.g.doubleclick.net/tag/js/gpt.js">
+    
+    <!-- Title of the web page -->
+    <title> Quiz Topbestof | Play Quiz game Learn & Gain Knowledge </title>
+    <!-- Favicon Of Site -->
+    <link rel="shortcut icon" href="images/quiz_favicon.png" type="image/x-icon">
+    <!-- Link to Tailwind CSS for styling -->
+    <link href="css/tailwind.min.css" rel="stylesheet">
+    <!-- Link to custom CSS for additional styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div>
+        <!-- Container for toast notifications -->
+        <div id="toast-container" class="fixed top-5 right-5 space-y-4"></div>
+
+        <!-- Main mobile container -->
+        <div class="mobile" style="background-color: #454545;">
+            <!-- Ad unit -->
+            <div class="d-flex justify-center text-center">
+                <div style="width: 100%;">
+                    <div data-slot-name="Topbestof_Mobile_Top" id="Topbestof_Mobile_Top"></div>
+                </div>
+            </div>
+            <!-- Grid layout for the main content -->
+            <div class="grid grid-flow-row grid-rows-12">
+                <!-- Header section with logo and wallet info -->
+                <div class="d-flex justify-center text-center">
+                    <div class="sticky grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 gap-0 lg:gap-0">
+                        <!-- Logo section -->
+                        <div class="col-auto">
+                            <img src="images/logo.png" alt="Logo" class="px-2">
+                        </div>
+                        <!-- Lottie animation for reward ad -->
+                        <div class="flex justify-end items-center col-span-3">
+                            <div onclick="RewardAd()" id="lottie-container" class="inline-block"
+                                style="width: 40px; height: 40px;">
+                                <img src="images/Reward.png" alt="Reward">
+                            </div>
+                        </div>
+                        <!-- User wallet display -->
+                        <div class="user_wallet text-sm font-semibold flex justify-end items-center col-end-6 mr-3">
+                            <span class="rounded-full px-3 me-2"><strong id="total_coins"></strong> <i
+                                    class="fa-solid fa-coins" style="color: #FFD43B;"></i> </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile image section -->
+                <div class="mt-5">
+                    <div class="flex justify-center">
+                        <div class="profile_img flex justify-center">
+                            <div class="profile_cirlcle_bg">
+                                <img src="images/Profile-icon-removebg-preview.webp"
+                                    style="filter: drop-shadow(5px 4px 3px black);" class="z-20 m-auto" width="155"
+                                    alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User coin display -->
+                <div class="mt-3">
+                    <div class="flex justify-center">
+                        <div class="user_coin_show p-2.5 px-4 text-sm font-bold">
+                            Coins
+                            <div class="float-right">
+                                <span id="profile_total_coins">4651</span>
+                                <i class="fa-solid fa-coins" style="color: #000000;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 100%;">
+            </div>
+        </div>
+        <!-- Bottom navigation bar -->
+        <div class="sticky bottom-0">
+            <div class=" m-auto  left-0 z-50 w-full h-16 b bottom_bar"
+                style="background-color: #454545; border-radius: 14px 14px 0 0; box-shadow: #1a1a1a 0px -10px 10px;">
+                <div class="grid h-full max-w-lg grid-cols-3 mx-auto">
+                    <!-- Category button -->
+                    <button type="button" onclick="window.location.href='category.html'"
+                        class="inline-flex flex-col items-center justify-center font-medium px-5  group">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path
+                                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                                stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        <span class="text-sm">Category</span>
+                    </button>
+                    <!-- Home button -->
+                    <button type="button" onclick="window.location.href='home.html'"
+                        class="inline-flex flex-col items-center justify-center font-medium px-5   group">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 20 20"
+                            stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+                            <path
+                                d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+                            </path>
+                        </svg>
+                        <span class="text-sm">Home</span>
+                    </button>
+                    <!-- Profile button -->
+                    <button type="button" onclick="window.location.href='profile.html'"
+                        class="inline-flex flex-col items-center justify-center font-medium px-5  group  bg-gray-700"
+                        style="background-color: #454545; border-radius: 14px 14px 0 0; box-shadow: #1a1a1a  0px 0px 19px">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_337_6)">
+                                <path
+                                    d="M12.0001 0.359985C5.57147 0.359985 0.360107 5.57135 0.360107 12C0.360107 18.4286 5.57147 23.64 12.0001 23.64C18.4287 23.64 23.6401 18.4286 23.6401 12C23.6401 5.57135 18.4287 0.359985 12.0001 0.359985ZM12.0001 3.95999C12.7297 3.95999 13.4429 4.17632 14.0495 4.58166C14.6561 4.98699 15.1289 5.56311 15.4081 6.23715C15.6873 6.91119 15.7604 7.65289 15.618 8.36843C15.4757 9.08399 15.1244 9.74127 14.6085 10.2572C14.0926 10.7731 13.4353 11.1244 12.7197 11.2667C12.0042 11.409 11.2625 11.336 10.5885 11.0568C9.91444 10.7776 9.33832 10.3048 8.93298 9.69817C8.52764 9.09155 8.31131 8.37836 8.31131 7.64879C8.31131 6.67045 8.69994 5.73219 9.39174 5.04042C10.0835 4.34862 11.0218 3.95999 12.0001 3.95999ZM16.9266 19.3526C15.4445 20.2627 13.7393 20.7444 12.0001 20.7444C10.2609 20.7444 8.55572 20.2627 7.07363 19.3526C5.50619 18.3869 5.20163 16.229 6.44627 14.8728C7.15223 14.1031 8.01047 13.4885 8.96656 13.0681C9.92264 12.6476 10.9557 12.4305 12.0001 12.4305C13.0445 12.4305 14.0776 12.6476 15.0337 13.0681C15.9897 13.4885 16.848 14.1031 17.5539 14.8728C18.7988 16.229 18.494 18.3869 16.9266 19.3526Z"
+                                    fill="#ffff" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_337_6">
+                                    <rect width="24" height="24" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        <span class="text-sm">Profile</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function RewardAd() {
+
+            adBreak({
+                type: 'reward',           // The type of this placement
+                name: 'game_started',    // A descriptive name for this placement
+                beforeReward: (showAdFn) => { console.log("beforeReward ") + showAdFn(0) },
+                adDismissed: () => { console.log("adDismissed"); },
+                adViewed: () => { console.log("adViewed"); },
+                adBreakDone: (placementInfo) => {
+                    console.log(placementInfo.breakStatus);
+                    if (placementInfo.breakStatus == "viewed") {
+                        localStorage.totalcoin = 100
+
+                        showToast({ title: "Congratulation!", msg: "🥳 Reward Added" })
+                        localStorage.totalcoin =
+                            setTimeout(closereward, 1000)
+                    } else {
+                        showToast({ title: "Sorry!", msg: "🚫Reward Ad Not available" })
+                    }
+                },
+            });
+
+        }
+        function showToast(e) {
+            // Check debug setting and return early if debug is false
+            const config = window.AdSystemConfig;
+            if (config && config.debug === false) {
+              console.log("[Toast-Debug-Off]", e.title, "-", e.msg);
+              return;
+            }
+            
+            // Create the toast element
+            const toast = document.createElement('div');
+            toast.className = 'max-w-xs bg-white border border-gray-200 p-4 rounded shadow-lg flex items-center space-x-4';
+            toast.innerHTML = `
+            <div class="flex-shrink-0">
+              <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7 12l5 5L21 7" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-semibold">${e.title}</p>
+              <p class="text-sm">${e.msg}</p>
+            </div>
+          `;
+            // Append the toast to the container
+            document.getElementById('toast-container').appendChild(toast);
+            // Automatically remove the toast after 3 seconds
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        let allcoins = localStorage.getItem('totalcoin');
+        document.getElementById('total_coins').innerText = allcoins
+    </script>
+    <!-- jQuery library - moved to bottom for better performance -->
+    <script defer src="js/jquery-3.6.4.min.js"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4TSLVVBZB5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4TSLVVBZB5');
+</script>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2269043296918674');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2269043296918674&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+</body>
+</html>
+
+

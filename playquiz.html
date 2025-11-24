@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- PRIORITY 1: Enhanced Google Ads infrastructure for fastest ad loading -->
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="//securepubads.g.doubleclick.net">
+    <link rel="dns-prefetch" href="//pagead2.googlesyndication.com" />
+    <link rel="dns-prefetch" href="//googleads.g.doubleclick.net" />
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="//securepubads.g.doubleclick.net">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com/" crossorigin />
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/" crossorigin />
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/" crossorigin />
+    
+    <!-- Preload the scripts -->
+    <link rel="preload" as="script" href="https://securepubads.g.doubleclick.net/tag/js/gpt.js">
+  <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+  
+  
+  <script src="js/lite-font.js"></script>
+    
+    <!-- Title of the web page -->
+    <title> Quiz Topbestof | Play Quiz game Learn & Gain Knowledge </title>
+    <!-- Favicon Of Site -->
+    <link rel="shortcut icon" href="images/quiz_favicon.png" type="image/x-icon">
+    <!-- Link to Tailwind CSS for styling -->
+    <link href="css/tailwind.min.css" rel="stylesheet">
+    <!-- Link to custom CSS for additional styles -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- GPT Configuration for Rewarded Ads -->
+    <script>
+      // Constants for GPT Rewarded Ad Configuration
+      const REWARDED_AD_UNIT_ID = '/22760191030/rumas';
+      const REWARD_AMOUNT = 100;
+      const NAVIGATION_DELAY = 800; // Navigation delay in milliseconds
+    </script>
+    
+    <script>
+      // GPT Rewarded Ad Setup for PlayQuiz
+      window.googletag = window.googletag || { cmd: [] };
+      let rewardedSlot;
+      let rewardPayload;
+
+      // Reward Ad Pool Management
+      const rewardAdPool = {
+        slots: [],
+        readySlots: [],
+        activeSlotIndex: -1,
+        maxSlots: 2,
+        
+        addSlot(slot) {
+          this.slots.push(slot);
+          console.log(`[PLAYQUIZ-Pool] Added slot. Total slots: ${this.slots.length}`);
+        },
+        
+        markSlotReady(slot) {
+          if (!this.readySlots.includes(slot)) {
+            this.readySlots.push(slot);
+            console.log(`[PLAYQUIZ-Pool] Slot marked ready. Ready slots: ${this.readySlots.length}`);
+          }
+        },
+        
+        getReadySlot() {
+          return this.readySlots.length > 0 ? this.readySlots[0] : null;
+        },
+        
+        removeReadySlot(slot) {
+          const index = this.readySlots.indexOf(slot);
+          if (index > -1) {
+            this.readySlots.splice(index, 1);
+            console.log(`[PLAYQUIZ-Pool] Removed ready slot. Remaining: ${this.readySlots.length}`);
+          }
+        },
+        
+        shouldCreateNewSlot() {
+          return this.slots.length < this.maxSlots && this.readySlots.length === 0;
+        },
+        
+        clear() {
+          this.slots = [];
+          this.readySlots = [];
+          this.activeSlotIndex = -1;
+          console.log('[PLAYQUIZ-Pool] Cleared all slots');
+        }
+      };
+
+      function initializeRewardedAd(isReinit = false) {
+        googletag.cmd.push(() => {
+          // Define the rewarded ad slot
+          try {
+            rewardedSlot = googletag.defineOutOfPageSlot(
+              REWARDED_AD_UNIT_ID,
+              googletag.enums.OutOfPageFormat.REWARDED
+            );
+          } catch (error) {
+            console.error('[PLAYQUIZ-GPT-ERROR] Failed to define rewarded slot:', error);
+          }
+
+          if (rewardedSlot) {
+            rewardedSlot.addService(googletag.pubads());
+            rewardAdPool.addSlot(rewardedSlot);
+            
+            googletag.pubads().addEventListener('rewardedSlotReady', (event) => {
+              console.log('[PLAYQUIZ-GPT] Rewarded ad ready');
+              window.rewardedSlotReadyEvent = event;
+              rewardAdPool.markSlotReady(event.slot);
+            });
+
+            googletag.pubads().addEventListener('rewardedSlotVideoCompleted', (event) => {
+              console.log('[PLAYQUIZ-GPT] Video completed');
+            });
+
+            googletag.pubads().addEventListener('rewardedSlotGranted', (event) => {
+              console.log('[PLAYQUIZ-GPT] Reward granted by user');
+              rewardPayload = event.payload;
+              // Navigation will be handled in rewardedSlotClosed event
+            });
+
+            googletag.pubads().addEventListener('rewardedSlotClosed', (event) => {
+              console.log('[PLAYQUIZ-GPT-EVENT] 🔄 Reward ad closed - preparing for reuse');
+              
+              // Determine if user completed the ad (received reward) or skipped
+              const userCompleted = rewardPayload !== null;
+              
+              if (userCompleted) {
+                console.log('[PLAYQUIZ-GPT-EVENT] ✅ User completed ad and earned reward');
+                rewardPayload = null;
+              } else {
+                console.log('[PLAYQUIZ-GPT-EVENT] ⏭️ User skipped the ad without completing');
+              }
+
+              // Clear the ready event
+              window.rewardedSlotReadyEvent = null;
+              
+              // Remove from ready pool
+              rewardAdPool.removeReadySlot(event.slot);
+              
+              // Handle navigation based on completion status
+              if (userCompleted) {
+                // User completed ad - grant reward and navigate
+                navigateWithReward(true);
+              } else {
+                // Direct redirect for skip
+                setTimeout(() => {
+                  window.location.href = "home.html";
+                }, NAVIGATION_DELAY);
+              }
+              
+              // Auto-reinitialize slot if needed for future use
+              console.log('[PLAYQUIZ-GPT-EVENT] ⏳ Scheduling slot reinitialization...');
+              setTimeout(() => {
+                if (rewardAdPool.shouldCreateNewSlot()) {
+                  console.log('[PLAYQUIZ-GPT-EVENT] ✅ Creating new slot for next reward opportunity');
+                  initializeRewardedAd(true);
+                } else {
+                  console.log('[PLAYQUIZ-GPT-EVENT] 📊 Pool has ready slots, no reinit needed');
+                }
+              }, 1000);
+            });
+          } else {
+            console.error('[PLAYQUIZ-GPT-ERROR] ❌ Failed to create rewarded ad slot - rewardedSlot is null/undefined');
+          }
+          
+          googletag.pubads().addEventListener('slotRenderEnded', (event) => {
+          });
+          
+          if(rewardedSlot){
+            googletag.display(rewardedSlot);
+          }
+          
+          const initType = isReinit ? 'reinitialized' : 'initialized';
+          console.log(`[PLAYQUIZ-GPT] Rewarded ad ${initType}`);
+        });
+      }
+
+      // Function to handle user reward and navigation
+      function navigateWithReward(userCompleted = false) {
+        const currentCoins = parseInt(localStorage.getItem("totalcoin") || "0");
+        const newTotal = currentCoins + REWARD_AMOUNT;
+        
+        localStorage.setItem("totalcoin", newTotal.toString());
+        
+        const actionType = userCompleted ? 'watched' : 'closed';
+        console.log(`[PLAYQUIZ-Reward] User ${actionType} ad. Granted ${REWARD_AMOUNT} coins. Total: ${newTotal}`);
+        
+        if (window.showToast) {
+          showToast({
+            title: "Reward Granted!",
+            msg: `🎉 You earned ${REWARD_AMOUNT} coins for ${userCompleted ? 'watching the ad' : 'viewing the ad'}!`,
+          });
+        }
+        
+        setTimeout(() => {
+          window.location.href = "home.html";
+        }, NAVIGATION_DELAY);
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // Initialize rewarded ad
+        initializeRewardedAd();
+        
+        // Function to check GPT readiness
+        window.checkGPTStatus = function () {
+          return rewardedSlot ? { status: 'ready', slot: rewardedSlot } : { status: 'initializing' };
+        };
+      });
+    </script>
+</head>
+
+<body>
+    <div>
+        <div id="toast-container" class="fixed top-5 right-5 space-y-4"></div>
+
+        <div class="mobile">
+
+            <div class="fist_layer text-center p-3 mt-3">
+                <div style="width: 100%;">
+                <div data-slot-name="Topbestof_Mobile_Top" id="Topbestof_Mobile_Top"></div>
+                </div>
+                <div class="row">
+                    <div class="col mt-10">
+                        <div class="ft_area p-3">
+                            <h4 class="font-bold">Quiz Game</h4>
+                            <div class="font-bold text mb-3">You have won <i class="fa-solid fa-coins"
+                                    style="color: #FFD43B;"></i> 100 Coins
+                            </div>
+
+                            <button class="default_btn" onclick="RewardAd()">Play Quiz</button>
+
+                            <div class="QA_rules">
+                                <ul class="mt-1 p-3 text-gray-400 text-sm font-bold">
+                                    <li>Play Quizzes in 25+ categories like GK, Sports, Bollywood, Business, Cricket &
+                                        More!
+                                    </li>
+                                    <li>Compete with lakhs of other players!</li>
+                                    <li>Win Coins for every game</li>
+                                    <li>Trusted by millions of other quiz enthusiasts like you!</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+
+        function showToast(e) {
+            // Check debug setting and return early if debug is false
+            const config = window.AdSystemConfig;
+            if (config && config.debug === false) {
+              console.log("[Toast-Debug-Off]", e.title, "-", e.msg);
+              return;
+            }
+            
+            // Create the toast element
+            const toast = document.createElement('div');
+            toast.className = 'max-w-xs  border border-gray-200 p-4 rounded shadow-lg flex items-center space-x-4';
+            toast.innerHTML = `
+            <div class="flex-shrink-0">
+              <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7 12l5 5L21 7" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-semibold">${e.title}</p>
+              <p class="text-sm">${e.msg}</p>
+            </div>
+          `;
+            // Append the toast to the container
+            document.getElementById('toast-container').appendChild(toast);
+            // Automatically remove the toast after 3 seconds
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+    
+        }
+        function RewardAd() {
+            // ===== BOT PROTECTION CHECK =====
+            if (window.isBotTraffic) {
+              console.error("[PLAYQUIZ-RewardAd] 🤖 Bot traffic - Reward ads disabled");
+              showToast({
+                title: "Not Available",
+                msg: "❌ Reward ads are not available at this time.",
+              });
+              return false;
+            }
+            
+            // Check if GPT is ready
+            if (!window.googletag) {
+              console.error("[PLAYQUIZ-RewardAd] GPT not ready");
+              showToast({
+                title: "Error",
+                msg: "🚫 Ad system not ready. Please try again.",
+              });
+              return false;
+            }
+
+            try {
+              // Try to use a ready slot from pool
+              const readySlot = rewardAdPool.getReadySlot();
+              
+              if (readySlot && window.rewardedSlotReadyEvent) {
+                console.log('[PLAYQUIZ-RewardAd] 🎬 Using ready slot from pool');
+                window.rewardedSlotReadyEvent.makeRewardedVisible();
+                rewardAdPool.removeReadySlot(readySlot);
+                
+                showToast({
+                  title: "Rewarded Ad Active",
+                  msg: "🎬 Rewarded ad is now active!",
+                });
+                window.rewardedSlotReadyEvent = null;
+                return true;
+              } else if (window.rewardedSlotReadyEvent) {
+                console.log('[PLAYQUIZ-RewardAd] 🎬 Using main rewarded slot');
+                window.rewardedSlotReadyEvent.makeRewardedVisible();
+                
+                showToast({
+                  title: "Rewarded Ad Active",
+                  msg: "🎬 Rewarded ad is now active!",
+                });
+                window.rewardedSlotReadyEvent = null;
+                return true;
+              } else {
+                console.log("[PLAYQUIZ-RewardAd] ⏳ No ready slot available yet. Creating new slot...");
+                
+                if (rewardAdPool.shouldCreateNewSlot()) {
+                  initializeRewardedAd(true);
+                  
+                  showToast({
+                    title: "Loading Ad...",
+                    msg: "⏳ Preparing rewarded ad for you...",
+                  });
+                  
+                  return false;
+                } else {
+                  console.log("[PLAYQUIZ-RewardAd] Pool has slots but none ready, redirecting...");
+                  setTimeout(() => {
+                    window.location.href = 'home.html';
+                  }, NAVIGATION_DELAY);
+                  return false;
+                }
+              }
+            } catch (error) {
+              console.error("[PLAYQUIZ-RewardAd] Error:", error.message);
+              
+              // Fallback: Direct reward
+              const currentCoins = parseInt(localStorage.getItem("totalcoin") || "0");
+              const newTotal = currentCoins + REWARD_AMOUNT;
+              localStorage.setItem("totalcoin", newTotal.toString());
+              
+              showToast({
+                title: "Reward Granted!",
+                msg: `🎉 You earned ${REWARD_AMOUNT} coins! (Fallback)`,
+              });
+              
+              setTimeout(() => {
+                window.location.href = 'home.html';
+              }, NAVIGATION_DELAY);
+              
+              return false;
+            }
+        }
+
+    </script>
+    <script defer src="js/jquery-3.6.4.min.js"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4TSLVVBZB5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4TSLVVBZB5');
+</script>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2269043296918674');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2269043296918674&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+</body>
+
+
+</html>
+
+
+
